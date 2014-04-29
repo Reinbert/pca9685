@@ -1,4 +1,7 @@
+IMPORTANT INFO
 
+	Currently, there's a bug preventing the pca9685 from creating any output on the pwm pins without explicitly setting a frequency. 
+	But as long as you do you'll be fine. View the examples on how to set a frequency. 
 
 PCA9685 README
 

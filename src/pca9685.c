@@ -56,7 +56,7 @@ int pca9685Setup(const int pinBase, const int i2cAddress)
 
 	// Check if pinBase is available
 	if (!node)
-		return 0;
+		return -1;
 
 	// Check i2c address
 	int fd = wiringPiI2CSetup(i2cAddress);

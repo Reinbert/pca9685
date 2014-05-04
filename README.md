@@ -1,8 +1,3 @@
-IMPORTANT INFO
-
-	Currently, there's a bug preventing the pca9685 from creating any output on the pwm pins without explicitly setting a frequency. 
-	But as long as you do you'll be fine. View the examples on how to set a frequency. 
-
 PCA9685 README
 
 
@@ -47,9 +42,16 @@ FUNCTIONS
 
 	Use	
 		
-		int pca9685Setup(const int pinBase, const int i2cAddress/* = 0x40*/);
+		int pca9685Setup(const int pinBase, const int i2cAddress/* = 0x40*/, float freq/* = 50*/);
  
-	to setup a single pca9685 device at the specified i2c address.
+	to setup a single pca9685 device at the specified i2c address and PWM frequency.
+	
+	Parameters are:
+	
+		- pinBase: 		Use a pinBase > 64, eg. 300
+		- i2cAddress:	The default address is 0x40
+		- freq:			Frequency will be capped to range [40..1000] Hertz. Try 50 for servos
+	
 	When successful, this will reserve 17 pins in wiringPi and return a file descriptor with 
 	which you can access advanced functions (view below).
 

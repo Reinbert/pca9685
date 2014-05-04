@@ -48,8 +48,14 @@ static int myOnRead(struct wiringPiNodeStruct *node, int pin);
 int baseReg(int pin);
 
 
-
-int pca9685Setup(const int pinBase, const int i2cAddress)
+/**
+ * Setup a PCA9685 device with wiringPi.
+ *  
+ * pinBase: 	Use a pinBase > 64, eg. 300
+ * i2cAddress:	The default address is 0x40
+ * freq:		Frequency will be capped to range [40..1000] Hertz. Try 50 for servos
+ */
+int pca9685Setup(const int pinBase, const int i2cAddress, float freq)
 {
 	// Create a node with 16 pins [0..15] + [16] for all
 	struct wiringPiNodeStruct *node = wiringPiNewNode(pinBase, PIN_ALL + 1);
@@ -63,11 +69,16 @@ int pca9685Setup(const int pinBase, const int i2cAddress)
 	if (fd < 0)
 		return fd;
 
-	// Setup the chip. Enable auto-increment of registers
-	int settings = wiringPiI2CReadReg8(fd, PCA9685_MODE1);
+	// Setup the chip. Enable auto-increment of registers.
+	int settings = wiringPiI2CReadReg8(fd, PCA9685_MODE1) & 0x7F;
 	int autoInc = settings | 0x20;
 
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, autoInc);
+	
+	// Set frequency of PWM signals. Also ends sleep mode and starts PWM output.
+	if (freq > 0)
+		pca9685PWMFreq(fd, freq);
+	
 
 	node->fd			= fd;
 	node->pwmWrite		= myPwmWrite;
@@ -79,8 +90,8 @@ int pca9685Setup(const int pinBase, const int i2cAddress)
 }
 
 /**
- * Sets the frequency of PWM signals
- * Must be in range: 40 and 1000 Hertz
+ * Sets the frequency of PWM signals.
+ * Frequency will be capped to range [40..1000] Hertz. Try 50 for servos.
  */
 void pca9685PWMFreq(int fd, float freq)
 {
@@ -92,18 +103,18 @@ void pca9685PWMFreq(int fd, float freq)
 	// Further info here: http://www.nxp.com/documents/data_sheet/PCA9685.pdf Page 24
 	int prescale = (int)(25000000.0f / (4096 * freq) - 0.5f);
 
-	// Get settings and calc bytes. Don't allow restart bit to be set before actual restart
-	int settings = wiringPiI2CReadReg8(fd, PCA9685_MODE1) & 0x7F;
-	int sleep	= settings | 0x10;
-	int wake 	= settings & 0xEF;
-	int restart = wake | 0x80;
+	// Get settings and calc bytes for the different states.
+	int settings = wiringPiI2CReadReg8(fd, PCA9685_MODE1) & 0x7F;	// Set restart bit to 0
+	int sleep	= settings | 0x10;									// Set sleep bit to 1
+	int wake 	= settings & 0xEF;									// Set sleep bit to 0
+	int restart = wake | 0x80;										// Set restart bit to 1
 
 	// Go to sleep, set prescale and wake up again.
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, sleep);
 	wiringPiI2CWriteReg8(fd, PCA9685_PRESCALE, prescale);
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, wake);
 
-	// Now wait a millisecond until oscillator finished stabilizing and restart.
+	// Now wait a millisecond until oscillator finished stabilizing and restart PWM.
 	delay(1);
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, restart);
 }

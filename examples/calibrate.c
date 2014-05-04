@@ -54,14 +54,13 @@ int main(void)
 	printf("PCA9685 servo calibration\n");
 	printf("Use this to test out the min and max millisecond values of your servo\n");
 
-	int fd = pca9685Setup(PIN_BASE, 0x40);
+	int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)
 	{
 		printf("Error in setup\n");
 		return fd;
 	}
 
-	pca9685PWMFreq(fd, HERTZ);
 	pca9685PWMReset(fd);
 	printf("Frequency is set to %d hertz\n", HERTZ);
 

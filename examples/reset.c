@@ -37,7 +37,7 @@
 
 int main(void)
 {
-	int fd = pca9685Setup(PIN_BASE, 0x40);
+	int fd = pca9685Setup(PIN_BASE, 0x40, 0);
 
 	// If valid, turn off
 	if (fd >= 0)

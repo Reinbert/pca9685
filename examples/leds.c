@@ -43,54 +43,18 @@
 
 
 
-//int calcTick(float impulseLength, int hertz)
-//{
-//	float pulseMs = 1000.0f / hertz;
-//	return (MAX_PWM * impulseLength / pulseMs + 0.5f);
-//}
-//
-///**
-// * input is [0..1]
-// */
-//float map(float input, float min, float max)
-//{
-//	return (input * max) + (1 - input) * min;
-//
-//}
-//
-//int get(float input)
-//{
-//	return calcTick(map(input, 0.6, 2.2), HERTZ);
-//}
-//
-void printRegisters(int fd)
-{
-	int i;
-	for (i = 0; i < 256; i++)
-	{
-		if (i == 70)
-			i = 250;
-		printf("%3d: 0x%x\n", i, wiringPiI2CReadReg8(fd, i));
-	}
-}
-
-
 int main(void)
 {
 	printf("PCA9685 LED example\n");
 
-	int fd = pca9685Setup(PIN_BASE, 0x40);
+	int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)
 	{
 		printf("Error in setup\n");
 		return fd;
 	}
 
-	printRegisters(fd);
-
-//	pca9685PWMFreq(fd, HERTZ);
 	pca9685PWMReset(fd);
-
 
 	int i, j;
 	int active = 1;
@@ -133,50 +97,6 @@ int main(void)
 		pwmWrite(PIN_BASE + 16, 0);
 		delay(500);
 	}
-
-//	for (i = 0; i < 16; i++)
-
-//		for (i = 0; i < PIN_ALL; i++)
-//		{
-//			for (j = 0; j < PIN_ALL; j++)
-//			{
-//				if (i == j)
-//					pwmWrite(PIN_BASE + j, MAX_PWM * 0.1);
-//				else if (abs(i - j) == 1)
-//					pwmWrite(PIN_BASE + j, MAX_PWM * 0.05);
-//				else if (abs(i - j) == 2)
-//					pwmWrite(PIN_BASE + j, MAX_PWM * 0.02);
-//				else
-//					pwmWrite(PIN_BASE + j, 0);
-//			}
-//
-//			delay(100);
-//		}
-//
-//		for (i = 8; i >= 0; i--)
-//		{
-//			for (j = 0; j < 9; j++)
-//			{
-//				if (i == j)
-//					pwmWrite(PIN_BASE + j, MAX_PWM * 0.2);
-//				else if (abs(i - j) == 1)
-//					pwmWrite(PIN_BASE + j, MAX_PWM * 0.05);
-//				else if (abs(i - j) == 2)
-//					pwmWrite(PIN_BASE + j, MAX_PWM * 0.02);
-//				else
-//					pwmWrite(PIN_BASE + j, 0);
-//			}
-//
-//			delay(100);
-//		}
-
-//		for (i = 0; i < 16; i++)
-//		{
-//			pca9685FullOff(fd, i, 1);
-//			delay(10);
-//		}
-//	}
-
 
 
 	return 0;

@@ -65,15 +65,14 @@ int main(void)
 	printf("Connect a servo to any pin. It will rotate to random angles\n");
 
 	// Setup with pinbase 300 and i2c location 0x40
-	int fd = pca9685Setup(PIN_BASE, 0x40);
+	int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)
 	{
 		printf("Error in setup\n");
 		return fd;
 	}
 
-	// Set frequency of this device to 50 hertz and reset all output
-	pca9685PWMFreq(fd, HERTZ);
+	// Reset all output
 	pca9685PWMReset(fd);
 
 

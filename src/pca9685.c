@@ -215,20 +215,18 @@ int baseReg(int pin)
 
 /**
  * Simple PWM control which sets on-tick to 0 and off-tick to value.
- * If value is 0, full-off will be enabled
- * If value is 4095, full-on will be enabled
+ * If value is <= 0, full-off will be enabled
+ * If value is >= 4096, full-on will be enabled
+ * Every value in between enables PWM output
  */
 static void myPwmWrite(struct wiringPiNodeStruct *node, int pin, int value)
 {
 	int fd   = node->fd;
 	int ipin = pin - node->pinBase;
 
-	// Mask 12 bit
-	value &= 0x0FFF;
-
-	if (value == 4095)
+	if (value >= 4096)
 		pca9685FullOn(fd, ipin, 1);
-	else if (value)
+	else if (value > 0)
 		pca9685PWMWrite(fd, ipin, 0, value);	// (Deactivates full-on and off by itself)
 	else
 		pca9685FullOff(fd, ipin, 1);

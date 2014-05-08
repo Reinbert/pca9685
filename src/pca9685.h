@@ -35,8 +35,8 @@ extern int pca9685Setup(const int pinBase, const int i2cAddress/* = 0x40*/, floa
 // You now have access to the following wiringPi functions:
 //
 // void pwmWrite (int pin, int value)
-//		if value == 0, set full-off
-//		else if value == 4095, set full-on
+//		if value <= 0, set full-off
+//		else if value >= 4096, set full-on
 //		else set PWM
 //
 // void digitalWrite (int pin, int value)

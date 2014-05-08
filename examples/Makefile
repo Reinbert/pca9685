@@ -36,11 +36,11 @@ LDLIBS	= -lwiringPi -lwiringPiDev -lpthread -lm -lwiringPiPca9685
 # Should not alter anything below this line
 ###############################################################################
 
-SRC	=	servo.c reset.c calibrate.c leds.c
+SRC	=	servo.c reset.c calibrate.c leds.c piezo.c
 
 OBJ	=	$(SRC:.c=.o)
 
-BINS	=	$(SRC:.c=)
+BINS=	$(SRC:.c=)
 
 all:	$(BINS)
 
@@ -55,6 +55,10 @@ calibrate:	calibrate.o
 leds:	leds.o
 	@echo [link]
 	@$(CC) -o $@ leds.o $(LDFLAGS) $(LDLIBS)
+	
+piezo:	piezo.o
+	@echo [link]
+	@$(CC) -o $@ piezo.o $(LDFLAGS) $(LDLIBS)
 	
 reset:	reset.o
 	@echo [link]

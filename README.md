@@ -67,8 +67,8 @@ FUNCTIONS
 	Set PWM
 
 		void pwmWrite (int pin, int value)
-			if value == 0, set full-off
-			else if value == 4095, set full-on
+			if value <= 0, set full-off
+			else if value >= 4096, set full-on
 			else set PWM
 
 	Set full-on or full-off

@@ -36,7 +36,7 @@
 #include <stdlib.h>
 
 #define PIN_BASE 300
-#define MAX_PWM 4095
+#define MAX_PWM 4096
 #define HERTZ 50
 
 /**

@@ -1,3 +1,10 @@
+examples/calibrate
+examples/leds
+examples/piezo
+examples/reset
+examples/servo
+
+
 # Prerequisites
 *.d
 

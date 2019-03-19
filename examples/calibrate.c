@@ -54,6 +54,9 @@ int main(void)
 	printf("PCA9685 servo calibration\n");
 	printf("Use this to test out the min and max millisecond values of your servo\n");
 
+	// Calling wiringPi setup first.
+	wiringPiSetup();
+
 	int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)
 	{

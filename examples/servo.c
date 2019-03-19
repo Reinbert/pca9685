@@ -64,6 +64,9 @@ int main(void)
 	printf("PCA9685 servo example\n");
 	printf("Connect a servo to any pin. It will rotate to random angles\n");
 
+	// Calling wiringPi setup first.
+	wiringPiSetup();
+
 	// Setup with pinbase 300 and i2c location 0x40
 	int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)

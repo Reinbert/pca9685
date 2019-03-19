@@ -185,6 +185,9 @@ int main(void)
 {
 	printf("PCA9685 piezo ceramic disk example.\nThis example plays a tune on a piezo ceramic disk if wired to one of the PWM pins.\nView info on top of file for more info.\n");
 
+	// Calling wiringPi setup first.
+	wiringPiSetup();
+
 	fd = pca9685Setup(PIN_BASE, 0x40, 0);
 	if (fd < 0)
 	{

@@ -37,6 +37,9 @@
 
 int main(void)
 {
+	// Calling wiringPi setup first.
+	wiringPiSetup();
+
 	int fd = pca9685Setup(PIN_BASE, 0x40, 0);
 
 	// If valid, turn off

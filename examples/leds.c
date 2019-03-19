@@ -47,6 +47,9 @@ int main(void)
 {
 	printf("PCA9685 LED example\n");
 
+	// Calling wiringPi setup first.
+	wiringPiSetup();
+
 	int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)
 	{
